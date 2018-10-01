@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "*.cu": "c",
+        "*.tdd": "makefile",
+        "*.cfg": "tcl",
+        "*.svd": "xml",
+        "*.hpp": "cpp",
+        "uart.h": "c",
+        "debug.h": "c",
+        "rom.h": "c",
+        "usbdevice.h": "c",
+        "uartstdio.h": "c",
+        "usb-ids.h": "c",
+        "buttons.h": "c",
+        "usb_gamepad_structs.h": "c",
+        "hw_types.h": "c",
+        "usbhid.h": "c",
+        "mouse.h": "c"
+    }
+}
