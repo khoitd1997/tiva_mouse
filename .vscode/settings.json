@@ -15,6 +15,7 @@
         "usb_gamepad_structs.h": "c",
         "hw_types.h": "c",
         "usbhid.h": "c",
-        "mouse.h": "c"
+        "mouse.h": "c",
+        "hw_nvic.h": "c"
     }
 }

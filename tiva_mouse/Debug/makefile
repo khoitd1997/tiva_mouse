@@ -15,6 +15,7 @@ ORDERED_OBJS += \
 "./Tiva_Extra/Tivaware_Dep/utils/softuart.obj" \
 "./Tiva_Extra/Tivaware_Dep/utils/uartstdio.obj" \
 "./Tiva_Extra/Tivaware_Dep/utils/ustdlib.obj" \
+"./Tiva_Extra/debug_utils/swo_segger.obj" \
 "./Tiva_Extra/hardware_helper/hardware_helper.obj" \
 "./Tiva_Extra/hardware_helper/hardware_helper_adc.obj" \
 "./Tiva_Extra/hardware_helper/hardware_helper_dma.obj" \
@@ -24,6 +25,7 @@ ORDERED_OBJS += \
 "./Tiva_Extra/tiva_utils/pin_utils.obj" \
 "./Tiva_Extra/tiva_utils/pwm_utils.obj" \
 "./src/main.obj" \
+"./src/mouse.obj" \
 "../usb_dev_gamepad_ccs.cmd" \
 "../Tiva_Extra/Tivaware_Dep/IQmath/ccs/IQmathLib/Debug/IQmathLib.lib" \
 "../Tiva_Extra/Tivaware_Dep/driverlib/ccs/Debug/driverlib.lib" \
@@ -49,6 +51,7 @@ RMDIR := rm -rf
 -include Tiva_Extra/Tivaware_Dep/sensorlib/ccs/Debug/subdir_vars.mk
 -include Tiva_Extra/Tivaware_Dep/usblib/ccs/Debug/subdir_vars.mk
 -include Tiva_Extra/Tivaware_Dep/utils/subdir_vars.mk
+-include Tiva_Extra/debug_utils/subdir_vars.mk
 -include Tiva_Extra/hardware_helper/subdir_vars.mk
 -include Tiva_Extra/tiva_utils/subdir_vars.mk
 -include src/subdir_vars.mk
@@ -60,6 +63,7 @@ RMDIR := rm -rf
 -include Tiva_Extra/Tivaware_Dep/sensorlib/ccs/Debug/subdir_rules.mk
 -include Tiva_Extra/Tivaware_Dep/usblib/ccs/Debug/subdir_rules.mk
 -include Tiva_Extra/Tivaware_Dep/utils/subdir_rules.mk
+-include Tiva_Extra/debug_utils/subdir_rules.mk
 -include Tiva_Extra/hardware_helper/subdir_rules.mk
 -include Tiva_Extra/tiva_utils/subdir_rules.mk
 -include src/subdir_rules.mk
@@ -194,8 +198,8 @@ usb_dev_gamepad.bin: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "startup_ccs.obj" "Tiva_Extra/Tivaware_Dep/driverlib/epi_workaround_ccs.obj" "Tiva_Extra/Tivaware_Dep/drivers/buttons.obj" "Tiva_Extra/Tivaware_Dep/drivers/rgb.obj" "Tiva_Extra/Tivaware_Dep/utils/softuart.obj" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.obj" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.obj" "Tiva_Extra/hardware_helper/hardware_helper.obj" "Tiva_Extra/hardware_helper/hardware_helper_adc.obj" "Tiva_Extra/hardware_helper/hardware_helper_dma.obj" "Tiva_Extra/hardware_helper/hardware_helper_gpio.obj" "Tiva_Extra/hardware_helper/hardware_helper_pwm.obj" "Tiva_Extra/tiva_utils/peripheral_utils.obj" "Tiva_Extra/tiva_utils/pin_utils.obj" "Tiva_Extra/tiva_utils/pwm_utils.obj" "src/main.obj" 
-	-$(RM) "startup_ccs.d" "Tiva_Extra/Tivaware_Dep/drivers/buttons.d" "Tiva_Extra/Tivaware_Dep/drivers/rgb.d" "Tiva_Extra/Tivaware_Dep/utils/softuart.d" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.d" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.d" "src/main.d" 
+	-$(RM) "startup_ccs.obj" "Tiva_Extra/Tivaware_Dep/driverlib/epi_workaround_ccs.obj" "Tiva_Extra/Tivaware_Dep/drivers/buttons.obj" "Tiva_Extra/Tivaware_Dep/drivers/rgb.obj" "Tiva_Extra/Tivaware_Dep/utils/softuart.obj" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.obj" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.obj" "Tiva_Extra/debug_utils/swo_segger.obj" "Tiva_Extra/hardware_helper/hardware_helper.obj" "Tiva_Extra/hardware_helper/hardware_helper_adc.obj" "Tiva_Extra/hardware_helper/hardware_helper_dma.obj" "Tiva_Extra/hardware_helper/hardware_helper_gpio.obj" "Tiva_Extra/hardware_helper/hardware_helper_pwm.obj" "Tiva_Extra/tiva_utils/peripheral_utils.obj" "Tiva_Extra/tiva_utils/pin_utils.obj" "Tiva_Extra/tiva_utils/pwm_utils.obj" "src/main.obj" "src/mouse.obj" 
+	-$(RM) "startup_ccs.d" "Tiva_Extra/Tivaware_Dep/drivers/buttons.d" "Tiva_Extra/Tivaware_Dep/drivers/rgb.d" "Tiva_Extra/Tivaware_Dep/utils/softuart.d" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.d" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.d" "Tiva_Extra/debug_utils/swo_segger.d" "src/main.d" "src/mouse.d" 
 	-$(RM) "Tiva_Extra/hardware_helper/hardware_helper.d" "Tiva_Extra/hardware_helper/hardware_helper_adc.d" "Tiva_Extra/hardware_helper/hardware_helper_dma.d" "Tiva_Extra/hardware_helper/hardware_helper_gpio.d" "Tiva_Extra/hardware_helper/hardware_helper_pwm.d" "Tiva_Extra/tiva_utils/peripheral_utils.d" "Tiva_Extra/tiva_utils/pin_utils.d" "Tiva_Extra/tiva_utils/pwm_utils.d" 
 	-$(RM) "Tiva_Extra/Tivaware_Dep/driverlib/epi_workaround_ccs.d" 
 	-@echo 'Finished clean'

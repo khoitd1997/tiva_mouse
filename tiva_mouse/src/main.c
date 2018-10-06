@@ -1,3 +1,4 @@
+#include "mouse.h"
 #include "mouse_usb_config.h"
 
 #include <stdint.h>
@@ -40,32 +41,35 @@
 #include "inc/hw_types.h"
 #include "inc/hw_uart.h"
 
+#include "debug_utils/swo_segger.h"
 #include "utils/uartstdio.h"
 
 uint32_t rxCallBack(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgParam, void *pvMsgData) {
   switch (ui32Event) {
     case USB_EVENT_CONNECTED:
-      UARTprintf("Host connected\n");
+      SWO_PrintString("Host connected\n");
       break;
     case USB_EVENT_DISCONNECTED:
-      UARTprintf("Host disconnected\n");
+      SWO_PrintString("Host disconnected\n");
       break;
     case USB_EVENT_RX_AVAILABLE:
       break;
     case USB_EVENT_ERROR:
-      UARTprintf("Communication error\n");
+      SWO_PrintString("Communication error\n");
       break;
     case USB_EVENT_SUSPEND:
-      UARTprintf("Host suspended\n");
+      SWO_PrintString("Host suspended\n");
       break;
     case USB_EVENT_RESUME:
-      UARTprintf("\nBus Resume\n");
+      SWO_PrintString("\nBus Resume\n");
       break;
     case USBD_HID_EVENT_IDLE_TIMEOUT:
+      // must send report now
       break;
     case USBD_HID_EVENT_GET_REPORT_BUFFER:
       break;
     case USBD_HID_EVENT_GET_REPORT:
+      // host requesting report
       break;
     case USBD_HID_EVENT_SET_PROTOCOL:
       break;
@@ -79,33 +83,33 @@ uint32_t rxCallBack(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgParam, v
       break;
   }
 
-  USBDHIDReportWrite();
-  UARTprintf("Received something\n");
+  // USBDHIDReportWrite();
+  SWO_PrintString("Received something\n");
   return 0;
 }
 
 uint32_t txCallBack(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgParam, void *pvMsgData) {
   switch (ui32Event) {
     case USB_EVENT_TX_COMPLETE:
-      UARTprintf("Finished Sending\n");
+      SWO_PrintString("Finished Sending\n");
       break;
   }
 
-  UARTprintf("Tx event\n");
+  SWO_PrintString("Tx event\n");
   return 0;
 }
 
 /* HID Device */
-tUSBDHIDDevice mouseDevice = {.ui16VID                  = USB_VID_TI_1CBE,
-                              .ui16PID                  = USB_PID_MOUSE,
-                              .ui16MaxPowermA           = 125,
+tUSBDHIDDevice mouseDevice = {.ui16VID                  = VENDOR_ID,
+                              .ui16PID                  = PRODUCT_ID,
+                              .ui16MaxPowermA           = MAX_PWR_MA,
                               .ui8PwrAttributes         = USB_CONF_ATTR_BUS_PWR,
                               .ui8Subclass              = USB_SUBCLASS_UNDEFINED,
                               .ui8Protocol              = USB_HID_PROTOCOL_MOUSE,
                               .ui8NumInputReports       = 1,
                               .psReportIdle             = g_psReportIdle,
                               .pfnRxCallback            = rxCallBack,
-                              .pvRxCBData               = NULL,
+                              .pvRxCBData               = (void *)(&mouseDevice),
                               .pfnTxCallback            = txCallBack,
                               .pvTxCBData               = NULL,
                               .bUseOutEndpoint          = false,
@@ -173,8 +177,8 @@ int main(void) {  //
   ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
   ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_3 | GPIO_PIN_2);
 
-  ConfigureUART();
-  UARTprintf("Hello, world!\n");
+  // ConfigureUART();
+  SWO_PrintString("Hello, world!\n");
 
   // usb interrupt register
   //   ROM_IntMasterEnable();
@@ -183,17 +187,21 @@ int main(void) {  //
   //   USBIntRegister(USB0_BASE, USB0DeviceIntHandler);
 
   if (NULL != USBDHIDInit(0, &mouseDevice)) {
-    UARTprintf("Connection successful\n");
+    SWO_PrintString("Connection successful\n");
   } else {
-    UARTprintf("Connection failed\n");
+    SWO_PrintString("Connection failed\n");
   }
 
+  int8_t hidRep[HID_REPORT_BUF_LEN_BYTE] = {0};
+  makeHidReport(hidRep);
+
   for (;;) {
-    UARTprintf("Bru\n");
+    SWO_PrintString("Bru\n");
     ROM_IntMasterEnable();
-    for (uint32_t counter = 0; counter < 50000; ++counter) {
+    for (uint32_t counter = 0; counter < 500000; ++counter) {
       // wait
     }
+    USBDHIDReportWrite(&mouseDevice, hidRep, HID_REPORT_BUF_LEN_BYTE, false);
   }
   return 0;
 }

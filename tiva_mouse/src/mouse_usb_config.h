@@ -51,47 +51,40 @@
 #define TOTAL_STRING_DESCRIPTOR 4
 #define LANG_DESCRIPTOR_LEN 4
 
+#define VENDOR_ID 0xe000          // currently unused vendor ID
+#define PRODUCT_ID USB_PID_MOUSE  // mouse ID
+#define MAX_PWR_MA 125
+
 const uint8_t mouseLanguageString[] = {
     LANG_DESCRIPTOR_LEN, USB_DTYPE_STRING, USBShort(USB_LANG_EN_US)};
 
 const uint8_t mouseManufactureString[] = {
-    (17 + 1) * 2, USB_DTYPE_STRING,
+    (10 + 1) * 2, USB_DTYPE_STRING,
     'K',          0,
     'h',          0,
     'o',          0,
     'i',          0,
-    'T',          0,
     ' ',          0,
-    'I',          0,
-    'n',          0,
-    's',          0,
-    't',          0,
+    'T',          0,
     'r',          0,
-    'u',          0,
-    'm',          0,
-    'e',          0,
+    'i',          0,
     'n',          0,
-    't',          0,
-    's',          0,
+    'h',          0,
 };
 
-const uint8_t mouseProductString[] = {(16 + 1) * 2, USB_DTYPE_STRING,
-                                      'K',          0,
-                                      'e',          0,
-                                      'y',          0,
-                                      'b',          0,
-                                      'o',          0,
-                                      'a',          0,
-                                      'r',          0,
-                                      'd',          0,
-                                      ' ',          0,
-                                      'E',          0,
-                                      'x',          0,
-                                      'a',          0,
-                                      'm',          0,
-                                      'p',          0,
-                                      'l',          0,
-                                      'e',          0};
+const uint8_t mouseProductString[] = {
+    (10 + 1) * 2, USB_DTYPE_STRING,
+    'K',          0,
+    'h',          0,
+    'o',          0,
+    'i',          0,
+    ' ',          0,
+    'M',          0,
+    'o',          0,
+    'u',          0,
+    's',          0,
+    'e',          0,
+};
 
 const uint8_t mouseSerialString[] = {
     (8 + 1) * 2, USB_DTYPE_STRING, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0, '6', 0, '7', 0, '8', 0};
@@ -101,151 +94,32 @@ const uint8_t *const mouseStringDescriptorList[] = {
 
 /*******************HID report descriptor********************************/
 const uint8_t mouseReportDescriptor[] = {
-    0x05,
-    0x01,  //     Usage Page (Generic Desktop)
-    0x09,
-    0x02,  //     Usage (Mouse)
-
-    0xA1,
-    0x01,  //     Collection (Application)
-
-    // Report ID 1: Mouse buttons + scroll/pan
-    0x85,
-    0x01,  //     Report Id 1
-    0x09,
-    0x01,  //     Usage (Pointer)
-    0xA1,
-    0x00,  //     Collection (Physical)
-    0x95,
-    0x05,  //     Report Count (3)
-    0x75,
-    0x01,  //     Report Size (1)
-    0x05,
-    0x09,  //     Usage Page (Buttons)
-    0x19,
-    0x01,  //     Usage Minimum (01)
-    0x29,
-    0x05,  //     Usage Maximum (05)
-    0x15,
-    0x00,  //     Logical Minimum (0)
-    0x25,
-    0x01,  //     Logical Maximum (1)
-    0x81,
-    0x02,  //     Input (Data, Variable, Absolute)
-    0x95,
-    0x01,  //     Report Count (1)
-    0x75,
-    0x03,  //     Report Size (3)
-    0x81,
-    0x01,  //     Input (Constant) for padding
-    0x75,
-    0x08,  //     Report Size (8)
-    0x95,
-    0x01,  //     Report Count (1)
-    0x05,
-    0x01,  //     Usage Page (Generic Desktop)
-    0x09,
-    0x38,  //     USAGE (Wheel)
-    0x15,
-    0x81,  //     Logical Minimum (-127)
-    0x25,
-    0x7F,  //     Logical Maximum (127)
-    0x81,
-    0x06,  //     Input (Data, Variable, Relative)
-    0x05,
-    0x0C,  //     Usage Page (Consumer)
-    0x0A,
-    0x38,
-    0x02,  //     Usage (AC Pan)
-    0x95,
-    0x01,  //     Report Count (1)
-    0x81,
-    0x06,  //     Input (Data,Value,Relative,Bit Field)
-    0xC0,  //     End Collection (Physical)
-
-    // Report ID 2: Mouse motion
-    0x85,
-    0x02,  //     Report Id 2
-    0x09,
-    0x01,  //     Usage (Pointer)
-    0xA1,
-    0x00,  //     Collection (Physical)
-    0x75,
-    0x0C,  //     Report Size (12)
-    0x95,
-    0x02,  //     Report Count (2)
-    0x05,
-    0x01,  //     Usage Page (Generic Desktop)
-    0x09,
-    0x30,  //     Usage (X)
-    0x09,
-    0x31,  //     Usage (Y)
-    0x16,
-    0x01,
-    0xF8,  //     Logical maximum (2047)
-    0x26,
-    0xFF,
-    0x07,  //     Logical minimum (-2047)
-    0x81,
-    0x06,  //     Input (Data, Variable, Relative)
-    0xC0,  //   End Collection (Physical)
-    0xC0,  // End Collection (Application)
-
-    // Report ID 3: Advanced buttons
-    0x05,
-    0x0C,  // Usage Page (Consumer)
-    0x09,
-    0x01,  // Usage (Consumer Control)
-    0xA1,
-    0x01,  // Collection (Application)
-    0x85,
-    0x03,  // Report Id (3)
-    0x15,
-    0x00,  // Logical minimum (0)
-    0x25,
-    0x01,  // Logical maximum (1)
-    0x75,
-    0x01,  // Report Size (1)
-    0x95,
-    0x01,  // Report Count (1)
-
-    0x09,
-    0xCD,  // Usage (Play/Pause)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-    0x0A,
-    0x83,
-    0x01,  // Usage (AL Consumer Control Configuration)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-    0x09,
-    0xB5,  // Usage (Scan Next Track)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-    0x09,
-    0xB6,  // Usage (Scan Previous Track)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-
-    0x09,
-    0xEA,  // Usage (Volume Down)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-    0x09,
-    0xE9,  // Usage (Volume Up)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-    0x0A,
-    0x25,
-    0x02,  // Usage (AC Forward)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-    0x0A,
-    0x24,
-    0x02,  // Usage (AC Back)
-    0x81,
-    0x06,  // Input (Data,Value,Relative,Bit Field)
-    0xC0   // End Collection
+    0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+    0x09, 0x02,  // USAGE (Mouse)
+    0xa1, 0x01,  // COLLECTION (Application)
+    0x09, 0x01,  //   USAGE (Pointer)
+    0xa1, 0x00,  //   COLLECTION (Physical)
+    0x05, 0x09,  //     USAGE_PAGE (Button)
+    0x19, 0x01,  //     USAGE_MINIMUM (Button 1)
+    0x29, 0x03,  //     USAGE_MAXIMUM (Button 3)
+    0x15, 0x00,  //     LOGICAL_MINIMUM (0)
+    0x25, 0x01,  //     LOGICAL_MAXIMUM (1)
+    0x95, 0x03,  //     REPORT_COUNT (3)
+    0x75, 0x01,  //     REPORT_SIZE (1)
+    0x81, 0x02,  //     INPUT (Data,Var,Abs)
+    0x95, 0x01,  //     REPORT_COUNT (1)
+    0x75, 0x05,  //     REPORT_SIZE (5)
+    0x81, 0x03,  //     INPUT (Cnst,Var,Abs)
+    0x05, 0x01,  //     USAGE_PAGE (Generic Desktop)
+    0x09, 0x30,  //     USAGE (X)
+    0x09, 0x31,  //     USAGE (Y)
+    0x15, 0x81,  //     LOGICAL_MINIMUM (-127)
+    0x25, 0x7f,  //     LOGICAL_MAXIMUM (127)
+    0x75, 0x08,  //     REPORT_SIZE (8)
+    0x95, 0x02,  //     REPORT_COUNT (2)
+    0x81, 0x06,  //     INPUT (Data,Var,Rel)
+    0xc0,        //   END_COLLECTION
+    0xc0         // END_COLLECTION
 };
 
 const uint8_t *const mouseClassDescriptor[] = {mouseReportDescriptor};
@@ -271,7 +145,7 @@ const uint8_t mouseConfigDescriptor[] = {
     1,                        // unique value for this config
     5,                        // index of string descriptor
     USB_CONF_ATTR_BUS_PWR,    // powering mode
-    125,                      // max power in 2 mA increment
+    MAX_PWR_MA,               // max power in 2 mA increment
 };
 
 // interface descriptor
