@@ -49,31 +49,15 @@
 int main(void) {
   ROM_FPULazyStackingEnable();
 
-  //
   // Set the clocking to run from the PLL at 50MHz
-  //
   ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
-  // usb stuffs
-  ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
-  while (!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOD)) {
-    // wait for clock to be ready
-  }
-
-  ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_USB0);
-  while (!SysCtlPeripheralReady(SYSCTL_PERIPH_USB0)) {
-    // wait for clock to be ready
-  }
-
   mouseInit();
-
-  SWO_PrintString("Hello, world!\n");
 
   uint8_t hidRep[HID_REPORT_BUF_LEN_BYTE] = {0};
   makeHidReport(hidRep);
 
   for (;;) {
-    SWO_PrintString("Bru\n");
     for (uint32_t counter = 0; counter < 5000000; ++counter) {
       // wait
     }

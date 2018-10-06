@@ -45,7 +45,7 @@
 #include "inc/hw_uart.h"
 
 #define MOUSE_LOGICAL_MAX 127
-#define MOUSE_LOGICAL_MIN -127
+#define MOUSE_LOGICAL_MIN (uint8_t)(-127)
 
 extern tUSBDHIDDevice mouseDevice;
 

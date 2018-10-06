@@ -1,10 +1,9 @@
 #include "mouse.h"
 #include "mouse_usb_config.h"
 
-#include <stdint.h>
-
+#include <assert.h>
 #include <stdbool.h>
-
+#include <stdint.h>
 #include <stdio.h>
 
 #include "inc/hw_types.h"
@@ -104,6 +103,16 @@ uint32_t mouseTxCallBack(void*    pvCBData,
 }
 
 void mouseInit(void) {
+  ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+  while (!SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOD)) {
+    // wait for clock to be ready
+  }
+
+  ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_USB0);
+  while (!SysCtlPeripheralReady(SYSCTL_PERIPH_USB0)) {
+    // wait for clock to be ready
+  }
+
   ROM_GPIOPinTypeUSBAnalog(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_4);
   USBStackModeSet(0, eUSBModeForceDevice, 0);
   ROM_IntMasterEnable();
@@ -116,6 +125,7 @@ void mouseInit(void) {
 }
 
 void makeHidReport(uint8_t hidBuf[HID_REPORT_BUF_LEN_BYTE]) {
+  assert(hidBuf);
   for (uint32_t hidBufIndex = 0; hidBufIndex < HID_REPORT_BUF_LEN_BYTE; ++hidBufIndex) {
     hidBuf[hidBufIndex] = 0;
   }
