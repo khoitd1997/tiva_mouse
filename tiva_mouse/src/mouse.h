@@ -8,6 +8,17 @@
 #define HID_REPORT_X_INDEX 1
 #define HID_REPORT_Y_INDEX 2
 
-void makeHidReport(int8_t hidBuf[HID_REPORT_BUF_LEN_BYTE]);
+uint32_t mouseRxCallBack(void *   pvCBData,
+                         uint32_t ui32Event,
+                         uint32_t ui32MsgParam,
+                         void *   pvMsgData);
+uint32_t mouseTxCallBack(void *   pvCBData,
+                         uint32_t ui32Event,
+                         uint32_t ui32MsgParam,
+                         void *   pvMsgData);
+
+void mouseInit(void);
+
+void makeHidReport(uint8_t hidBuf[HID_REPORT_BUF_LEN_BYTE]);
 
 #endif
