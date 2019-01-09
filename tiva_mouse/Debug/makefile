@@ -9,6 +9,9 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./startup_ccs.obj" \
+"./MM8451_Driver/src/main.obj" \
+"./MM8451_Driver/src/mma8451.obj" \
+"./MM8451_Driver/src/mma8451_utils.obj" \
 "./Tiva_Extra/Tivaware_Dep/driverlib/epi_workaround_ccs.obj" \
 "./Tiva_Extra/Tivaware_Dep/drivers/buttons.obj" \
 "./Tiva_Extra/Tivaware_Dep/drivers/rgb.obj" \
@@ -45,6 +48,7 @@ RMDIR := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include MM8451_Driver/src/subdir_vars.mk
 -include Tiva_Extra/Tivaware_Dep/IQmath/ccs/IQmathLib/Debug/subdir_vars.mk
 -include Tiva_Extra/Tivaware_Dep/driverlib/ccs/Debug/subdir_vars.mk
 -include Tiva_Extra/Tivaware_Dep/driverlib/subdir_vars.mk
@@ -57,6 +61,7 @@ RMDIR := rm -rf
 -include Tiva_Extra/tiva_utils/subdir_vars.mk
 -include src/subdir_vars.mk
 -include subdir_rules.mk
+-include MM8451_Driver/src/subdir_rules.mk
 -include Tiva_Extra/Tivaware_Dep/IQmath/ccs/IQmathLib/Debug/subdir_rules.mk
 -include Tiva_Extra/Tivaware_Dep/driverlib/ccs/Debug/subdir_rules.mk
 -include Tiva_Extra/Tivaware_Dep/driverlib/subdir_rules.mk
@@ -183,7 +188,7 @@ all: usb_dev_gamepad.out
 usb_dev_gamepad.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: ARM Linker'
-	"/home/kd/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -Ooff --advice:power="all" -g --c99 --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RA1 --define=UART_BUFFERED --diag_warning=225 --diag_wrap=off --display_error_number --gen_func_subsections=on --ual -z -m"usb_dev_gamepad_ccs.map" --stack_size=1024 --heap_size=0 -i"/home/kd/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/lib" -i"/home/kd/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="usb_dev_gamepad_linkInfo.xml" --rom_model -o "usb_dev_gamepad.out" $(ORDERED_OBJS)
+	"/home/kd/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -Ooff --advice:power="all" -g --c99 --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RA1 --define=UART_BUFFERED --diag_warning=225 --buffer_diagnostics --diag_wrap=off --display_error_number --verbose_diagnostics --gen_func_subsections=on --ual -z -m"usb_dev_gamepad_ccs.map" --stack_size=20000 --heap_size=3000 -i"/home/kd/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/lib" -i"/home/kd/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.3.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="usb_dev_gamepad_linkInfo.xml" --rom_model --unused_section_elimination=on -o "usb_dev_gamepad.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
@@ -199,8 +204,8 @@ usb_dev_gamepad.bin: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "startup_ccs.obj" "Tiva_Extra/Tivaware_Dep/driverlib/epi_workaround_ccs.obj" "Tiva_Extra/Tivaware_Dep/drivers/buttons.obj" "Tiva_Extra/Tivaware_Dep/drivers/rgb.obj" "Tiva_Extra/Tivaware_Dep/utils/softuart.obj" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.obj" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.obj" "Tiva_Extra/debug_utils/swo_segger.obj" "Tiva_Extra/hardware_helper/hardware_helper.obj" "Tiva_Extra/hardware_helper/hardware_helper_adc.obj" "Tiva_Extra/hardware_helper/hardware_helper_dma.obj" "Tiva_Extra/hardware_helper/hardware_helper_gpio.obj" "Tiva_Extra/hardware_helper/hardware_helper_pwm.obj" "Tiva_Extra/tiva_utils/peripheral_utils.obj" "Tiva_Extra/tiva_utils/pin_utils.obj" "Tiva_Extra/tiva_utils/pwm_utils.obj" "src/main.obj" "src/mouse.obj" "src/mouse_usb_config.obj" 
-	-$(RM) "startup_ccs.d" "Tiva_Extra/Tivaware_Dep/drivers/buttons.d" "Tiva_Extra/Tivaware_Dep/drivers/rgb.d" "Tiva_Extra/Tivaware_Dep/utils/softuart.d" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.d" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.d" "Tiva_Extra/debug_utils/swo_segger.d" "src/main.d" "src/mouse.d" "src/mouse_usb_config.d" 
+	-$(RM) "startup_ccs.obj" "MM8451_Driver/src/main.obj" "MM8451_Driver/src/mma8451.obj" "MM8451_Driver/src/mma8451_utils.obj" "Tiva_Extra/Tivaware_Dep/driverlib/epi_workaround_ccs.obj" "Tiva_Extra/Tivaware_Dep/drivers/buttons.obj" "Tiva_Extra/Tivaware_Dep/drivers/rgb.obj" "Tiva_Extra/Tivaware_Dep/utils/softuart.obj" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.obj" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.obj" "Tiva_Extra/debug_utils/swo_segger.obj" "Tiva_Extra/hardware_helper/hardware_helper.obj" "Tiva_Extra/hardware_helper/hardware_helper_adc.obj" "Tiva_Extra/hardware_helper/hardware_helper_dma.obj" "Tiva_Extra/hardware_helper/hardware_helper_gpio.obj" "Tiva_Extra/hardware_helper/hardware_helper_pwm.obj" "Tiva_Extra/tiva_utils/peripheral_utils.obj" "Tiva_Extra/tiva_utils/pin_utils.obj" "Tiva_Extra/tiva_utils/pwm_utils.obj" "src/main.obj" "src/mouse.obj" "src/mouse_usb_config.obj" 
+	-$(RM) "startup_ccs.d" "MM8451_Driver/src/main.d" "MM8451_Driver/src/mma8451.d" "MM8451_Driver/src/mma8451_utils.d" "Tiva_Extra/Tivaware_Dep/drivers/buttons.d" "Tiva_Extra/Tivaware_Dep/drivers/rgb.d" "Tiva_Extra/Tivaware_Dep/utils/softuart.d" "Tiva_Extra/Tivaware_Dep/utils/uartstdio.d" "Tiva_Extra/Tivaware_Dep/utils/ustdlib.d" "Tiva_Extra/debug_utils/swo_segger.d" "src/main.d" "src/mouse.d" "src/mouse_usb_config.d" 
 	-$(RM) "Tiva_Extra/hardware_helper/hardware_helper.d" "Tiva_Extra/hardware_helper/hardware_helper_adc.d" "Tiva_Extra/hardware_helper/hardware_helper_dma.d" "Tiva_Extra/hardware_helper/hardware_helper_gpio.d" "Tiva_Extra/hardware_helper/hardware_helper_pwm.d" "Tiva_Extra/tiva_utils/peripheral_utils.d" "Tiva_Extra/tiva_utils/pin_utils.d" "Tiva_Extra/tiva_utils/pwm_utils.d" 
 	-$(RM) "Tiva_Extra/Tivaware_Dep/driverlib/epi_workaround_ccs.d" 
 	-@echo 'Finished clean'

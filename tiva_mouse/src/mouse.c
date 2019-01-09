@@ -1,4 +1,5 @@
 #include "mouse.h"
+#include "mma8451.h"
 #include "mouse_usb_config.h"
 
 #include <assert.h>
@@ -40,6 +41,12 @@
 #include "inc/hw_types.h"
 
 #include "debug_utils/swo_segger.h"
+
+#define MAX_MOUSE_DATA 127
+#define MIN_MOUSE_DATA -127
+
+#define MAX_ACCEL_DATA 8191
+#define MIN_ACCEL_DATA -8191
 
 uint32_t mouseRxCallBack(void*    pvCBData,
                          uint32_t ui32Event,
@@ -85,6 +92,7 @@ uint32_t mouseRxCallBack(void*    pvCBData,
 
   // USBDHIDReportWrite();
   SWO_PrintString("Received something\n");
+
   return 0;
 }
 
@@ -115,8 +123,9 @@ void mouseInit(void) {
 
   ROM_GPIOPinTypeUSBAnalog(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_4);
   USBStackModeSet(0, eUSBModeForceDevice, 0);
-  ROM_IntMasterEnable();
+}
 
+void mouseEnable(void) {
   if (NULL != USBDHIDInit(0, &mouseDevice)) {
     SWO_PrintString("Connection successful\n");
   } else {
@@ -124,12 +133,23 @@ void mouseInit(void) {
   }
 }
 
-void makeHidReport(uint8_t hidBuf[HID_REPORT_BUF_LEN_BYTE]) {
+static void convAccelToMouse(const int32_t accelData, uint8_t* mouseData) {
+  *mouseData = (uint8_t)(accelData * MAX_MOUSE_DATA * 2 / ((float)MAX_ACCEL_DATA));
+}
+
+void makeHidReport(uint8_t hidBuf[HID_REPORT_BUF_LEN_BYTE], int32_t accelData[ACCEL_TOTAL_AXIS]) {
+  static int32_t prevAccelData[ACCEL_TOTAL_AXIS] = {0};
+
   assert(hidBuf);
-  for (uint32_t hidBufIndex = 0; hidBufIndex < HID_REPORT_BUF_LEN_BYTE; ++hidBufIndex) {
-    hidBuf[hidBufIndex] = 0;
+  assert(accelData);
+
+  convAccelToMouse(accelData[0], &hidBuf[HID_REPORT_X_INDEX]);
+  convAccelToMouse(accelData[1], &hidBuf[HID_REPORT_Y_INDEX]);
+
+  for (uint32_t dataIndex = 0; dataIndex < ACCEL_TOTAL_AXIS; ++dataIndex) {
+    prevAccelData[dataIndex] = accelData[dataIndex];
   }
 
-  hidBuf[HID_REPORT_X_INDEX] = 120;
-  hidBuf[HID_REPORT_Y_INDEX] = 120;
+  // hidBuf[HID_REPORT_X_INDEX] = 120;
+  // hidBuf[HID_REPORT_Y_INDEX] = 120;
 }

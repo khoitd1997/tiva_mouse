@@ -7,6 +7,15 @@
             <instance XML_version="1.2" href="drivers/jlinkcortexm4.xml" id="drivers" xml="jlinkcortexm4.xml" xmlpath="drivers"/>
             <platform XML_version="1.2" id="platform_0">
                 <instance XML_version="1.2" desc="Tiva TM4C123GH6PM_0" href="devices/tm4c123gh6pm.xml" id="Tiva TM4C123GH6PM_0" xml="tm4c123gh6pm.xml" xmlpath="devices"/>
+            <device HW_revision="1" XML_version="1.2" description="" id="Tiva TM4C123GH6PM_0" partnum="TM4C123GH6PM">
+                    <router HW_revision="1.0" XML_version="1.2" description="CS_DAP Router" id="CS_DAP_0" isa="CS_DAP">
+                        <subpath id="subpath_0">
+                            <cpu HW_revision="1.0" XML_version="1.2" desc="CORTEX_M4_0" description="Cortex M4 CPU" id="CORTEX_M4_0" isa="CORTEX_M4">
+                                <property Type="choicelist" Value="1" id="Target Interface Type"/>
+                            </cpu>
+                        </subpath>
+                    </router>
+                </device>
             </platform>
         </connection>
     </configuration>

@@ -1,3 +1,6 @@
 [submodule "tiva_mouse/Tiva_Extra"]
 	path = tiva_mouse/Tiva_Extra
 	url = https://github.com/khoitd1997/Tiva_Extra.git
+[submodule "tiva_mouse/MM8451_Driver"]
+	path = tiva_mouse/MM8451_Driver
+	url = https://github.com/khoitd1997/tiva_MMA8451_driver.git

@@ -1,6 +1,8 @@
 #include "mouse.h"
 #include "mouse_usb_config.h"
 
+#include "mma8451.h"
+
 #include <stdint.h>
 
 #include <stdbool.h>
@@ -39,29 +41,41 @@
 #include "inc/hw_nvic.h"
 #include "inc/hw_sysctl.h"
 #include "inc/hw_types.h"
-#include "inc/hw_uart.h"
 
 #include "debug_utils/swo_segger.h"
 #include "utils/uartstdio.h"
 
-/* HID Device */
+#define MMA8451_INT_PORT GPIO_PORTD_BASE
+#define MMA8451_INT_PERIPH_CLK SYSCTL_PERIPH_GPIOD
+#define MMA8451_INT_PIN GPIO_PIN_2
 
 int main(void) {
-  ROM_FPULazyStackingEnable();
+  SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
-  // Set the clocking to run from the PLL at 50MHz
-  ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
-
-  mouseInit();
+  IntMasterDisable();
 
   uint8_t hidRep[HID_REPORT_BUF_LEN_BYTE] = {0};
-  makeHidReport(hidRep);
+
+  mma8451Init();
+
+  mma8451Configure();
+  mma8451InterruptInit();
+
+  int32_t currData[ACCEL_TOTAL_AXIS] = {0};
+
+  mouseInit();
+  IntMasterEnable();
+  mouseEnable();
 
   for (;;) {
-    for (uint32_t counter = 0; counter < 5000000; ++counter) {
-      // wait
-    }
+    IntMasterDisable();
+    mma8451ReadAccelData(currData);
+    IntMasterEnable();
+    makeHidReport(hidRep, currData);
     USBDHIDReportWrite(&mouseDevice, hidRep, HID_REPORT_BUF_LEN_BYTE, false);
+    // for (uint32_t counter = 0; counter < 5000; ++counter) {
+    //   // wait
+    // }
   }
   return 0;
 }

@@ -15,9 +15,9 @@ void OnProjectLoad (void) {
   Project.SetDevice ("TM4C123GH6PM");
   Project.SetHostIF ("USB", "");
   Project.SetTargetIF ("SWD");
-  Project.SetTIFSpeed ("adaptive");
+  Project.SetTIFSpeed ("1 MHz");
   Project.SetTraceSource ("SWO");
-  Project.ConfigSWO ("auto", "50 MHz");
+  Project.ConfigSWO ("auto", "auto");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M4F.svd");
   Project.AddSvdFile ("$(InstallDir)/Config/Peripherals/ARMv7M.svd");
   //

@@ -1,4 +1,8 @@
 eclipse.preferences.version=1
+encoding//Debug/MM8451_Driver/src/subdir_rules.mk=UTF-8
+encoding//Debug/MM8451_Driver/src/subdir_vars.mk=UTF-8
+encoding//Debug/MM8451_Driver/subdir_rules.mk=UTF-8
+encoding//Debug/MM8451_Driver/subdir_vars.mk=UTF-8
 encoding//Debug/Tiva_Extra/Tivaware_Dep/IQmath/ccs/IQmathLib/Debug/subdir_rules.mk=UTF-8
 encoding//Debug/Tiva_Extra/Tivaware_Dep/IQmath/ccs/IQmathLib/Debug/subdir_vars.mk=UTF-8
 encoding//Debug/Tiva_Extra/Tivaware_Dep/driverlib/ccs/Debug/subdir_rules.mk=UTF-8
